@@ -13,6 +13,7 @@ class AuthProvider {
       else
       return false;
     } catch (e) {
+      print(e.message);
       return false;
     }
   }
@@ -39,6 +40,7 @@ class AuthProvider {
         return false;
       return true;
     } catch (e) {
+      print(e.message);
       print("Error logging with google");
       return false;
     }
