@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fire_auth/ui/signup.dart';
 import 'package:flutter_fire_auth/utils/firebase_auth.dart';
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   TextEditingController _emailController;
   TextEditingController _passwordController;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -28,54 +27,47 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 100.0),
-              Text("Login", style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0
-              ),),
+              Text(
+                "Signup",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
               const SizedBox(height: 20.0),
               RaisedButton(
-                child: Text("Login with Google"),
+                child: Text("Continue with Google"),
                 onPressed: () async {
                   bool res = await AuthProvider().loginWithGoogle();
-                  if(!res)
-                    print("error logging in with google");
+                  if (!res) print("error logging in with google");
                 },
               ),
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: "Enter email"
-                ),
+                decoration: InputDecoration(hintText: "Enter email"),
               ),
               const SizedBox(height: 10.0),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Enter password"
-                ),
+                decoration: InputDecoration(hintText: "Enter password"),
               ),
               const SizedBox(height: 10.0),
               RaisedButton(
-                child: Text("Login"),
-                onPressed: ()async {
-                  if(_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                child: Text("Create Account"),
+                onPressed: () async {
+                  if (_emailController.text.isEmpty ||
+                      _passwordController.text.isEmpty) {
                     print("Email and password cannot be empty");
                     return;
                   }
-                  bool res = await AuthProvider().signInWithEmail(_emailController.text, _passwordController.text);
-                  if(!res) {
-                    print("Login failed");
+                  bool res = await AuthProvider().signupWithEmail(
+                      _emailController.text, _passwordController.text);
+                  if(res) {
+                    _emailController.clear();
+                    _passwordController.clear();
+                    Navigator.pop(context);
                   }
-                },
-              ),
-              const SizedBox(height: 10.0),
-              RaisedButton(
-                child: Text("Signup"),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => SignupPage()
-                  ));
+                  if (!res) {
+                    print("Account creation failed");
+                  }
                 },
               )
             ],

@@ -18,6 +18,19 @@ class AuthProvider {
     }
   }
 
+  Future<bool> signupWithEmail(String email, String password) async {
+    try {
+      AuthResult res = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      FirebaseUser user = res.user;
+      if(user != null)
+        return true;
+      return false;
+    }catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
   Future<void> logOut() async {
     try {
       await _auth.signOut();
